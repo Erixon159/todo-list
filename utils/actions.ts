@@ -3,11 +3,18 @@
 import db from '@/utils/db'
 import { revalidatePath } from 'next/cache'
 
-export const completeTodo = async (id: string) => {
+export const setTodoStatus = async (id: string, status: string) => {
+  let completedAt = null
+
+  if (status === 'completed') {
+    completedAt = new Date()
+  }
+
   await db.todo.update({
     where: { id },
     data: {
-      completed: true,
+      todoStatus: status,
+      completedAt: completedAt,
     },
   })
 
@@ -25,6 +32,14 @@ export const newTodo = async (formData: FormData) => {
     data: {
       content: formData.get('content') as string,
     },
+  })
+
+  revalidatePath('/todos')
+}
+
+export const deleteTodo = async (id: string) => {
+  await db.todo.delete({
+    where: { id },
   })
 
   revalidatePath('/todos')

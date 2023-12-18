@@ -3,12 +3,14 @@ import React from 'react'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faGithub,
   faLinkedin,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons'
+import LogoImage from '@/public/logo.svg'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,17 +30,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      className="h-full scroll-smooth bg-white antialiased __variable_e66fe9 __variable_eab306"
-    >
+    <html lang="en" className="scroll-smooth bg-white antialiased">
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
-      <body className={`${inter.className} flex h-full flex-col`}>
-        <header className="py-10">
+      <body className={`${inter.className} flex h-screen flex-col`}>
+        <header className="py-10 h-30">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <nav className="relative z-50 flex justify-center">
+            <nav className="relative z-50 flex justify-start items-center md:gap-x-12">
+              <Link href="/" className="flex flex-row items-center gap-x-2">
+                <Image src={LogoImage} alt="Logo" />
+                <span className="text-xl">TodoList</span>
+              </Link>
               <div className="hidden md:flex md:gap-x-6">
                 {links.map((link) => (
                   <Link
@@ -53,8 +56,8 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
-        <main>{children}</main>
-        <footer>
+        {children}
+        <footer className="h-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center border-t border-slate-400/10 py-10 sm:flex-row-reverse sm:justify-between">
               <div className="flex gap-x-6">
@@ -78,7 +81,7 @@ export default function RootLayout({
                 </Link>
               </div>
               <p className="mt-6 text-sm text-slate-500 sm:mt-0">
-                fjdsl jfksd jfasjlf kdsjlf sad
+                Ut enim ad minima veniam
               </p>
             </div>
           </div>

@@ -1,7 +1,7 @@
 'use client'
 
 const ErrorUI = () => {
-  return <div>...ooops</div>
+  return <div>...Ooops</div>
 }
 
 export default ErrorUI

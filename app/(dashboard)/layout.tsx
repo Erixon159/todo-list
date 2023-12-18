@@ -3,12 +3,9 @@ import NewTodoForm from '@/components/NewTodoForm'
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <div>
-        <NewTodoForm />
-      </div>
-      <div>{children}</div>
+    <div className="mx-auto my-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 pt-20 text-center">
+      <NewTodoForm />
+      {children}
     </div>
   )
 }

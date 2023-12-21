@@ -1,4 +1,4 @@
-import db from '@/utils/db'
+import db from '@/utils/prisma'
 import { NextResponse } from 'next/server'
 
 export const GET = async () => {

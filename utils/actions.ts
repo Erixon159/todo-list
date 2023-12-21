@@ -1,22 +1,26 @@
 'use server'
 
-import db from '@/utils/db'
+import db from '@/utils/prisma'
+import {
+  create as prismaCreate,
+  read as prismaRead,
+  update as prismaUpdate,
+  remove as prismaDelete,
+} from '@/utils/prisma/actions'
+import {
+  create as firebaseCreate,
+  read as firebaseRead,
+  update as firebaseUpdate,
+  remove as firebaseDelete,
+} from '@/utils/firebase/actions'
 import { revalidatePath } from 'next/cache'
 
-export const setTodoStatus = async (id: string, status: string) => {
-  let completedAt = null
-
-  if (status === 'completed') {
-    completedAt = new Date()
+export const newTodo = async (formData: FormData) => {
+  if (process.env.USE_FIREBASE === 'true') {
+    firebaseCreate(formData)
+  } else {
+    prismaCreate(formData)
   }
-
-  await db.todo.update({
-    where: { id },
-    data: {
-      todoStatus: status,
-      completedAt: completedAt,
-    },
-  })
 
   revalidatePath('/todos')
 }
@@ -24,23 +28,39 @@ export const setTodoStatus = async (id: string, status: string) => {
 export const fetchTodos = async () => {
   // await new Promise((resolve) => setTimeout(() => resolve(), 2000))
 
-  return await db.todo.findMany({})
+  if (process.env.USE_FIREBASE === 'true') {
+    return firebaseRead()
+  } else {
+    return prismaRead()
+  }
 }
 
-export const newTodo = async (formData: FormData) => {
-  await db.todo.create({
-    data: {
-      content: formData.get('content') as string,
-    },
-  })
+export const setTodoStatus = async (
+  id: string,
+  content: string,
+  status: string,
+) => {
+  let completedAt = null
+
+  if (status === 'completed') {
+    completedAt = new Date()
+  }
+
+  if (process.env.USE_FIREBASE === 'true') {
+    firebaseUpdate(id, content, status, completedAt)
+  } else {
+    prismaUpdate(id, status, completedAt)
+  }
 
   revalidatePath('/todos')
 }
 
 export const deleteTodo = async (id: string) => {
-  await db.todo.delete({
-    where: { id },
-  })
+  if (process.env.USE_FIREBASE === 'true') {
+    firebaseDelete(id)
+  } else {
+    prismaDelete(id)
+  }
 
   revalidatePath('/todos')
 }

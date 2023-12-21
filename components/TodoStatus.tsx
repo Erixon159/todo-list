@@ -47,7 +47,7 @@ const TodoStatus = ({ todo, change }: TodoStatusModel) => {
       onChange={(input) => {
         setSelected(input)
         change(input.key)
-        startTransition(() => setTodoStatus(todo.id, input.key))
+        startTransition(() => setTodoStatus(todo.id, todo.content, input.key))
       }}
     >
       {({ open }) => (

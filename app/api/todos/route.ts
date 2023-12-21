@@ -1,17 +1,15 @@
-import db from '@/utils/prisma'
+import { read as firebaseRead } from '@/utils/firebase/actions'
+import { read as prismaRead } from '@/utils/prisma/actions'
 import { NextResponse } from 'next/server'
 
 export const GET = async () => {
-  const todos = await db.todo.findMany({})
+  let todos = []
+
+  if (process.env.USE_FIREBASE === 'true') {
+    todos = await firebaseRead()
+  } else {
+    todos = await prismaRead()
+  }
 
   return NextResponse.json({ todos: todos })
-}
-
-export const POST = async (request: Request) => {
-  const data = await request.json()
-  const todo = await db.todo.create({
-    data,
-  })
-
-  return NextResponse.json({ todo: todo })
 }
